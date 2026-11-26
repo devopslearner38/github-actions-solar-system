@@ -11,10 +11,6 @@ jobs:
     unit-testing:
         name: Unit Testing
         runs-on: ubuntu-latest
-        strategy:
-          matrix:
-            nodejs.version: [18,19,20]
-            operating_system: 
         steps:
         - name: Checkout Repository
           uses: actions/checkout@v4
