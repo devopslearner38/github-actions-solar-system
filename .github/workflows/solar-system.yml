@@ -13,7 +13,16 @@ env:
 
 jobs:
     unit-testing:
-        name: Unit Testing     
+        name: Unit Testing   
+        services:
+          mongo-db:
+            image: siddhartha67/mongo-db:non-prod
+            ports:
+              - 27017:27017
+        env:
+            MONGO_URI: mongodb://localhost:27017/superData
+            MONGO_USERNAME: non-prod-user   
+            MONGO_PASSWORD: non-prod-password
         strategy:
           matrix:
             nodejs_verison: [18,19,20]
@@ -53,7 +62,7 @@ jobs:
 
     code-coverage:
         name: Code Coverage
-        runs-on: ubuntu-latest     
+        runs-on: ubuntubuntu-latest
         steps:
         - name: Checkout Repository
           uses: actions/checkout@v4
