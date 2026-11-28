@@ -157,8 +157,42 @@ jobs:
             tags: |
               ${{vars.DOCKERHUB_USERNAME}}/solar-system:${{github.sha}}  
               ghcr.io/${{github.repository_owner}}/solar-system:${{github.sha}}   
+    
+    deploy-to-k8s:
+        name: Deploy to Local Kubernetes
+        needs: docker
+        runs-on: self-hosted
+   
+        steps:
+          - name: Checkout Repository
+            uses: actions/checkout@v4
+
+          - name: Deploy Updated Image to Kubernetes
+            run: |
+              IMAGE="${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}"
+              kubectl apply -f k8s/mongodb.yaml
+              kubectl apply -f k8s/solar-system.yaml
+              kubectl set image deployment/solar-system solar-system=$IMAGE
+              kubectl rollout status deployment/solar-system --timeout=120s
 
 
+    # dev-deploy:
+    #     needs: docker
+    #     runs-on: ubuntu-latest     
+    #     steps:
+    #     - name: Checkout Repository
+    #       uses: actions/checkout@v4              
+
+    #     - name: Install kubectl CLI
+    #       uses: azure/setup-kubectl@v3 
+    #       with:
+    #         version: 'v1.26.0'
+
+    #     - name: Fetch Kubernetes Cluster Details
+    #       run: |
+    #         kuberctl version --short 
+    #         echo ------------------------------
+    #           kubectl get nodes
 
 
 
