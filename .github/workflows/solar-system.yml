@@ -162,7 +162,7 @@ jobs:
         name: Deploy to Local Kubernetes
         needs: docker
         runs-on: self-hosted
-   
+        if: github.ref == 'refs/heads/main'
         steps:
           - name: Checkout Repository
             uses: actions/checkout@v4
